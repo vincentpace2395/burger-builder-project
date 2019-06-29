@@ -88,31 +88,20 @@ class BurgerBuilder extends React.Component {
 
     purchaseContinueHandler = () => {
         // alert('You continue');
-        /*this.setState({loading: true})
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Vinny Pace',
-                address: {
-                    street: 'TestStreet 1',
-                    zipCode: '78758',
-                    country: 'USA'
-                },
-                email: 'test@test.com'
-            },
-            deliveryMethod: 'fastest'
-        };
 
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({loading: false, isBeingPurchased: false});
-            })
-            .catch(error => {
-                this.setState({loading: false, isBeingPurchased: false});
-            });*/
+        const queryParams = [];
 
-        this.props.history.push('/checkout');
+        for (let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        queryParams.push('price=' + this.state.totalPrice);
+
+        const queryString = queryParams.join('&');
+
+        this.props.history.push({
+            pathname: '/checkout',
+            search:'?' + queryString
+        })
     };
 
     render() {
@@ -122,6 +111,7 @@ class BurgerBuilder extends React.Component {
         for (let key in disabledInfo) {
             disabledInfo[key] = disabledInfo[key] <= 0
         }
+
         let orderSummary = <OrderSummary
             ingredients={this.state.ingredients}
             price={this.state.totalPrice.toFixed(2)}
