@@ -1,5 +1,5 @@
 import React from 'react';
-import axios from '../../axios-orders';
+import axios from 'axios';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import Order from '../../components/Order/Order';
 
@@ -10,12 +10,12 @@ class Orders extends React.Component {
     };
 
     componentDidMount() {
-        axios.get('/orders.json')
-            .then(response => {
+        axios.get('https://react-my-burger-ca9ae.firebaseio.com/orders.json')
+            .then(res => {
                 const fetchedOrders = [];
-                for (let key in response.data) {
+                for (let key in res.data) {
                     fetchedOrders.push({
-                        ...response.data[key],
+                        ...res.data[key],
                         id: key
                     });
                 }
@@ -29,7 +29,12 @@ class Orders extends React.Component {
     render() {
         return (
             <div>
-                <Order />
+                {this.state.orders.map(order => (
+                    <Order
+                        key={order.id}
+                        ingredients={order.ingredients}
+                        price={order.price}/>
+                ))}
                 <Order />
             </div>
         );

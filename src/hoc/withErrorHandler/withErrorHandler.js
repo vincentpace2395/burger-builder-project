@@ -8,8 +8,8 @@ const withErrorHandler = (WrappedComponent, axios) => {
             error: null
         };
 
-        componentWillMount() {
-            this.reqInterceptor = axios.interceptors.request.use(req => {
+        componentDidMount() {
+            this.reqInterceptor = axios.interceptors.request.use(() => {
                 this.setState({error: null});
             });
             this.resInterceptor = axios.interceptors.response.use(res => res, error => {
